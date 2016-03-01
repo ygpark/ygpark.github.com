@@ -8,17 +8,11 @@
 body {
 	margin:0;
 	padding:0;
-    background-image: url("img/background.png");
-    background-repeat: repeat-x;
-}
-.outline {
-	width:900px;
-	margin: 0 auto;
 }
 .top {
 	background-color: black;
-	padding:15px 0px;
 	width:100%;
+	padding: 15px 0px;
 	color:white;
 }
 .top img {
@@ -50,7 +44,7 @@ body {
 
 .submenu {
 	background-color: gray;
-	padding:5px 15px;
+	padding:5px 0px;
 	width:100%;
 	color:white;
 }
@@ -60,6 +54,7 @@ body {
 .submenu a {
 	color: white;
 	text-decoration: none;
+	padding: 0 10px;
 }
 .submenu a:link {
     color: white;
@@ -81,28 +76,105 @@ body {
 	text-decoration: none;
 }
 
+.download {
+	background-color: #408BD6;
+	left:0px;
+	margin: 0;
+	padding:50px 0px 100px 0px;
+	width:100%;
+	color:white;
+}
+.download img {
+	vertical-align:middle;
+}
+.download a {
+	color: white;
+	text-decoration: none;
+	padding: 0 10px;
+}
+.download a:link {
+    color: white;
+	text-decoration: none;
+}
+
+.download a:visited {
+    color: white;
+	text-decoration: none;
+}
+
+.download a:hover {
+    color: white;
+	text-decoration: none;
+}
+
+.download a:active {
+    color: white;
+	text-decoration: none;
+}
+
 
 </style>
 </head>
 
 <body>
-	<div class="outline">
 		<div class="top">
-			<a href="http://ygpark.github.io">ygpark.github.io</a> |
-			<a href="http://ygpark.github.io"><img src="img/ice_24.png"/>아이스북</a>
+			<div style="width:900px; margin: 0 auto;">
+				<a href="http://ygpark.github.io">ygpark.github.io</a> |
+				<a href="http://ygpark.github.io"><img src="img/ice_24.png"/>아이스북</a>
+			</div>
 		</div>
-		<div class="submenu">소개 | 다운로드</div>
+		<div class="submenu">
+			<div style="width:900px; margin: 0 auto;">
+				<a href="menu_icebook_intro.html">소개</a>
+				<a href="menu_icebook_download.html">다운로드</a>
+			</div>
+		</div>
+		
+		<div class="download">
+			<div style="width:900px; margin:0 auto;">
+				<h1>노트북을 조용하게 사용하세요</h1>
+				<a href="bin/IceBook-0.1.exe" style="background-color:#F9FAFB; color:#408BD6; padding:10px 30px;">IceBook v0.1 다운로드</a><br><br><br>
+				<a href="bin/dotNetFx45_Full_setup.exe" style="background-color:#F9FAFB; color:#408BD6; padding:10px 30px;">.Net Framework 4.5 다운로드</a>
+				IceBook v0.1이 실행되지 않으면 .Net Framework 4.5를 먼저 설치해야합니다.
+			</div>
+		</div>
+		
 		<div>
+		
 			<br><br><br>
-			아이스북은 노트북 팬 소음을 줄여주는 프로그램입니다.<br>
-			노트북에서 항공기가 이륙하는 소리가 나거나, 노트북이 지나치게 뜨거울 때 사용하시면 좋습니다.<br>
-			<br>
-			아이스북은 CPU 성능을 제한하여 발열을 줄임으로써 팬 속도를 늦추는 방식을 사용합니다.<br>
-			<br><br><br>
-			<img src="img/power-option.png" width="300px"/>
-			<img src="img/taskmgr.png" width="580px"/>
+			
+			<!--광고 아웃라인 -->
+			<div style="width:900px; height:290px; margin: 0 auto;">
+				<!--상단 좌측 광고 -->
+				<div style="float:left; width:400px; margin-left: 50px;">
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- ygpark.github.io/menu_icebook_download.html -->
+					<ins class="adsbygoogle"
+						 style="display:inline-block;width:336px;height:280px"
+						 data-ad-client="ca-pub-3416645619145039"
+						 data-ad-slot="3147667093"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+				
+				<!--상단 우측 광고 -->
+				<div style="float:left; width:400px; margin-left: 50px;">
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- ygpark.github.io/menu_icebook_download.html -->
+					<ins class="adsbygoogle"
+						 style="display:inline-block;width:336px;height:280px"
+						 data-ad-client="ca-pub-3416645619145039"
+						 data-ad-slot="3147667093"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+			</div>
 		</div>
-	</div>
+		<div style="text-align:center;">
+		<img src="img/icebook-0.1.png">
+		</div>
 </body>
 
 </html>
