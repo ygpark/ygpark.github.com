@@ -1,0 +1,216 @@
+<HTML>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+
+var poloniex;			//빗썸 가격표(BTC)
+var bithumb = [];		//빗썸 가격표(KRW)
+var bithumb_btc = []; 	//빗썸 가격표(BTC)
+var tableBuffer = "";
+var ajax_status = 0;			// 콜백이 하나씩 도착할 때마다 1씩 증가
+var AJAX_STATUS_DONE = 4;	// 빗섬 콜백 3번 + 폴로닉스 콜백 1번 받아야 하므로 4가 끝임.
+
+// status 변수 확인
+function initPriceBithumb() {
+	//alert("initPriceBithumb");
+	getPriceBithumb("BTC");//"#bithumb_BTC"
+	getPriceBithumb("XRP");//"#bithumb_XRP"
+	getPriceBithumb("EOS");//"#bithumb_EOS"
+}
+
+function getPriceBithumb(coin) {
+	$.get("https://api.bithumb.com/public/ticker/"+coin, function(data, status){
+        if(status == "success") {
+			//alert("getPriceBithumb");
+			ajax_status++;
+			$("#status").text($("#status").text()+".......");
+			if(ajax_status == AJAX_STATUS_DONE) {
+				$("#status").text($("#status").text()+"Done");
+			}
+			bithumb[coin] = data["data"]["closing_price"];
+			//표에 값 넣기
+			$("#bithumb_"+coin).text(bithumb[coin]);
+			
+		}
+        if(status == "error"){
+            alert("Error at getPriceBithumb(coin)");
+		}
+    });
+}
+
+function initPricePoloniex() {
+	//alert("initPricePoloniex");
+	$.get("https://poloniex.com/public?command=returnTicker", function(data, status){
+		
+        if(status == "success") {
+			ajax_status++;
+			$("#status").text($("#status").text()+".......");
+			if(ajax_status == AJAX_STATUS_DONE) {
+				$("#status").text($("#status").text()+"Done");
+			}
+			poloniex = data;
+			//표에 값 넣기
+			$("#polo_BTS").text(getPoloniexBTC("BTS"));
+			$("#polo_XRP").text(getPoloniexBTC("XRP"));
+			$("#polo_ZRX").text(getPoloniexBTC("ZRX"));
+			$("#polo_NXT").text(getPoloniexBTC("NXT"));
+		}
+        if(status == "error"){
+            alert("Error at getPricePoloniex(coin)");
+		}
+    });
+}
+
+function getPoloniexBTC(coin) {
+	return poloniex["BTC_"+coin]['last'];
+}
+
+function getBithumbKRW(coin) {
+	return bithumb[coin];
+}
+
+function addComma(x) {
+   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+//결과 테이블 그리기 - 시작
+function beginTable() {
+	tableBuffer = "<table border=1>";
+	tableBuffer += "<tr><td>종류</td><td>단가(원)</td><td>단가(BTC)</td><td>갯수</td><td>BTC</td><td>가격(BTC로 판매)</td><td>가격(XRP로 판매)</td></tr>";
+}
+
+//결과 테이블 그리기 - 열 추가
+function addTableRow(coin, unit_price, unit_price_btc, count, btc, KRWbyBTC, KRWbyXRP) {
+	if(count == 0) 
+		count = "";
+	else
+		count = addComma(String(Number(count).toFixed(0)))+" 개";
+		
+	if(unit_price == 0)
+		unit_price = "";
+	else
+		unit_price = addComma(String(Number(unit_price).toFixed(0)))+" 원";
+		
+	if(unit_price_btc == 0)
+		unit_price_btc = "";
+	else
+		unit_price_btc = String(Number(unit_price_btc).toFixed(8))+" BTC";
+	
+		
+	btc = addComma(btc.toFixed(2))+" BTC";
+	KRWbyBTC = addComma(Number(KRWbyBTC).toFixed(0))+" 원";
+	KRWbyXRP = addComma(Number(KRWbyXRP).toFixed(0))+" 원";
+	tableBuffer += "<tr>"+"<td>"+coin+"</td>"+
+					"<td style='text-align:right;'>"+unit_price+"</td>"+
+					"<td style='text-align:right;'>"+unit_price_btc+"</td>"+
+					"<td style='text-align:right;'>"+count+"</td>"+
+					"<td style='text-align:right;'>"+btc+"</td>"+
+					"<td style='text-align:right;'>"+KRWbyBTC+"</td>"+
+					"<td style='text-align:right;'>"+KRWbyXRP+"</td></tr>";
+}
+
+//결과 테이블 그리기 - 마무리
+function endTable() {
+	tableBuffer += "</table>";
+	$("#resultWindow").html(tableBuffer);
+}
+
+//폴로닉스에서 coin * count의 가격을 가져온다.
+function getBTCOnPoloniex(coin) {
+	var X_BTC = getPoloniexBTC(coin);
+	return X_BTC;
+}
+
+function getKRWOnPoloniexByBTC(coin) {
+	var X_BTC = getPoloniexBTC(coin);
+	var KRW_BTC = X_BTC * bithumb["BTC"];
+	return KRW_BTC;
+}
+
+function getKRWOnPoloniexByXRP(coin) {
+	var X_BTC = getPoloniexBTC(coin);
+	var XRP_BTC = X_BTC / getPoloniexBTC("XRP");
+	var KRW_XRP = XRP_BTC * bithumb["XRP"];
+	return KRW_XRP;
+}
+
+$(document).ready(function(){
+	
+	initPriceBithumb();
+	initPricePoloniex();
+	
+	//버튼 클릭 이벤트 핸들러
+	$("button").click(function(){
+		
+		var count = [];
+		var btc = [];
+		var krw_by_btc = [];
+		var krw_by_xrp = [];
+		
+		count["BTS"] = Number($("#txtBtsCnt").val());
+		btc["BTS"] = getBTCOnPoloniex("BTS") * count["BTS"];
+		krw_by_btc["BTS"] = getKRWOnPoloniexByBTC("BTS") * count["BTS"];
+		krw_by_xrp["BTS"] = getKRWOnPoloniexByXRP("BTS") * count["BTS"];
+		
+		count["XRP"] = Number($("#txtXrpCnt").val());
+		btc["XRP"] = getBTCOnPoloniex("XRP") * count["XRP"];
+		krw_by_btc["XRP"] = getKRWOnPoloniexByBTC("XRP") * count["XRP"];
+		krw_by_xrp["XRP"] = getKRWOnPoloniexByXRP("XRP") * count["XRP"];
+		
+		count["EOS"] = Number($("#txtEosCnt").val());
+		bithumb_btc["EOS"] = getBithumbKRW("EOS") / getBithumbKRW("BTC");
+		btc["EOS"] = getBithumbKRW("EOS") / getBithumbKRW("BTC") * count["EOS"];
+		krw_by_btc["EOS"] = count["EOS"] * getBithumbKRW("EOS");
+		krw_by_xrp["EOS"] = count["EOS"] * getBithumbKRW("EOS");
+		
+		beginTable();
+		addTableRow("BTS", getKRWOnPoloniexByXRP("BTS"), getPoloniexBTC("BTS"), count["BTS"], btc["BTS"], krw_by_btc["BTS"], krw_by_xrp["BTS"]);
+		addTableRow("XRP", getBithumbKRW("XRP"),		 getPoloniexBTC("XRP"), count["XRP"], btc["XRP"], krw_by_btc["XRP"], krw_by_xrp["XRP"]);
+		addTableRow("EOS", getBithumbKRW("EOS"),		 bithumb_btc["EOS"], 	count["EOS"], btc["EOS"], krw_by_btc["EOS"], krw_by_xrp["EOS"]);
+		
+		var sum1 = 0;
+		for (var key in btc) {
+			sum1 += btc[key];
+		}
+		
+		var sum2 = 0;
+		for (var key in krw_by_btc) {
+			sum2 += krw_by_btc[key];
+		}
+		
+		var sum3 = 0;
+		for (var key in krw_by_xrp) {
+			sum3 += krw_by_xrp[key];
+		}
+		
+		
+		addTableRow("합계", 0, 0, 0, sum1, sum2, sum3);
+		endTable();
+		//alert(tableBuffer);
+	});
+});
+
+
+
+
+
+</script>
+</head>
+
+
+<body>
+
+<P>현재 상태: <span id="status">Loding...</span></p>
+
+<!-- value 값을 내 지갑의 BTS 갯수로 수정하면 사용하기 쉬움 -->
+
+<P>자산</P>
+<P>BTS | Bitshares <input id="txtBtsCnt" value="133321"></input></p>
+<P>XRP | Ripple <input id="txtXrpCnt" value="23598"></input></p>
+<P>EOS | EOS <input id="txtEosCnt" value="2735"></input></p>
+<P><button>Submit</button> </p>
+<div id="resultWindow">
+</div>
+</body>
+</HTML>
