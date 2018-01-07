@@ -104,12 +104,13 @@ function addTableRow(coin, unit_price, unit_price_btc, count, btc, KRWbyBTC, KRW
 	btc = addComma(btc.toFixed(2))+" BTC";
 	KRWbyBTC = addComma(Number(KRWbyBTC).toFixed(0))+" 원";
 	KRWbyXRP = addComma(Number(KRWbyXRP).toFixed(0))+" 원";
-	tableBuffer += "<tr>"+"<td>"+coin+"</td>"+
-					"<td style='text-align:right; width:100px;'>"+unit_price+"<br/>"+
+	tableBuffer += "<tr>"+
+					"<td style='text-align:center;'>"+coin+"</td>"+
+					"<td style='text-align:right; width:120px;'>"+unit_price+"<br/>"+
 					""+unit_price_btc+"</td>"+
-					"<td style='text-align:right; width:100px;'>"+count+"</td>"+
-					"<td style='text-align:right; width:100px;'>"+btc+"</td>"+
-					"<td style='text-align:right; width:100px;'>"+KRWbyBTC+"(BTC)<br/>"+
+					"<td style='text-align:right; width:90px;'>"+count+"</td>"+
+					"<td style='text-align:right; width:90px;'>"+btc+"</td>"+
+					"<td style='text-align:right; width:170px;'>"+KRWbyBTC+"(BTC)<br/>"+
 					""+KRWbyXRP+"(XRP)</td></tr>";
 }
 
