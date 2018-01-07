@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+	text-align: center;
+}
+</style>
 <script>
 
 
@@ -53,11 +63,6 @@ function initPricePoloniex() {
 				$("#status").text($("#status").text()+"Done");
 			}
 			poloniex = data;
-			//표에 값 넣기
-			$("#polo_BTS").text(getPoloniexBTC("BTS"));
-			$("#polo_XRP").text(getPoloniexBTC("XRP"));
-			$("#polo_ZRX").text(getPoloniexBTC("ZRX"));
-			$("#polo_NXT").text(getPoloniexBTC("NXT"));
 		}
         if(status == "error"){
             alert("Error at getPricePoloniex(coin)");
@@ -79,8 +84,13 @@ function addComma(x) {
 
 //결과 테이블 그리기 - 시작
 function beginTable() {
-	tableBuffer = "<table border=1>";
-	tableBuffer += "<tr><td>종류</td><td>단가(원)</td><td>갯수</td><td>BTC</td><td>가격</td></tr>";
+	tableBuffer = "<table style='border:0px solid;'>";
+	tableBuffer += 	"<tr>"+
+					"<td>종류</td>" +
+					"<td>단가(원)</td>"+
+					"<td>갯수</td>"+
+					"<td>BTC</td>"+
+					"<td>가격</td></tr>";
 }
 
 //결과 테이블 그리기 - 열 추가
@@ -105,13 +115,13 @@ function addTableRow(coin, unit_price, unit_price_btc, count, btc, KRWbyBTC, KRW
 	KRWbyBTC = addComma(Number(KRWbyBTC).toFixed(0))+" 원";
 	KRWbyXRP = addComma(Number(KRWbyXRP).toFixed(0))+" 원";
 	tableBuffer += "<tr>"+
-					"<td style='text-align:center;'>"+coin+"</td>"+
-					"<td style='text-align:right; width:120px;'>"+unit_price+"<br/>"+
+					"<td style='text-align:center; min-width:70px;'>"+coin+"</td>"+
+					"<td style='text-align:right; min-width:120px;'><b>"+unit_price+"</b><br/>"+
 					""+unit_price_btc+"</td>"+
-					"<td style='text-align:right; width:90px;'>"+count+"</td>"+
-					"<td style='text-align:right; width:90px;'>"+btc+"</td>"+
-					"<td style='text-align:right; width:170px;'>"+KRWbyBTC+"(BTC)<br/>"+
-					""+KRWbyXRP+"(XRP)</td></tr>";
+					"<td style='text-align:right; min-width:90px;'>"+count+"</td>"+
+					"<td style='text-align:right; min-width:90px;'>"+btc+"</td>"+
+					"<td style='text-align:right; min-width:170px;'>"+KRWbyBTC+"(BTC)<br/>"+
+					"<b>"+KRWbyXRP+"(XRP)</b></td></tr>";
 }
 
 //결과 테이블 그리기 - 마무리
