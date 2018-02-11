@@ -38,12 +38,13 @@ function getPriceBithumb(coin) {
 			//alert("getPriceBithumb");
 			ajax_status++;
 			$("#status").text($("#status").text()+".......");
-			if(ajax_status == AJAX_STATUS_DONE) {
-				$("#status").text($("#status").text()+"Done");
-			}
 			bithumb[coin] = data["data"]["closing_price"];
 			//표에 값 넣기
 			$("#bithumb_"+coin).text(bithumb[coin]);
+			
+			if(ajax_status == AJAX_STATUS_DONE) {
+				$("#status").text($("#status").text()+"Done");
+			}
 			
 		}
         if(status == "error"){
@@ -59,10 +60,13 @@ function initPricePoloniex() {
         if(status == "success") {
 			ajax_status++;
 			$("#status").text($("#status").text()+".......");
+			
+			poloniex = data;
+			
 			if(ajax_status == AJAX_STATUS_DONE) {
 				$("#status").text($("#status").text()+"Done");
+				showResult();
 			}
-			poloniex = data;
 		}
         if(status == "error"){
             alert("Error at getPricePoloniex(coin)");
@@ -149,11 +153,61 @@ function getKRWOnPoloniexByXRP(coin) {
 	return KRW_XRP;
 }
 
+function showResult(){
+		
+		var count = [];
+		var btc = [];
+		var krw_by_btc = [];
+		var krw_by_xrp = [];
+		
+		count["BTS"] = Number($("#txtBtsCnt").val());
+		btc["BTS"] = getBTCOnPoloniex("BTS") * count["BTS"];
+		krw_by_btc["BTS"] = getKRWOnPoloniexByBTC("BTS") * count["BTS"];
+		krw_by_xrp["BTS"] = getKRWOnPoloniexByXRP("BTS") * count["BTS"];
+		
+		count["XRP"] = Number($("#txtXrpCnt").val());
+		btc["XRP"] = getBTCOnPoloniex("XRP") * count["XRP"];
+		krw_by_btc["XRP"] = getKRWOnPoloniexByBTC("XRP") * count["XRP"];
+		krw_by_xrp["XRP"] = getKRWOnPoloniexByXRP("XRP") * count["XRP"];
+		
+		count["EOS"] = Number($("#txtEosCnt").val());
+		bithumb_btc["EOS"] = getBithumbKRW("EOS") / getBithumbKRW("BTC");
+		btc["EOS"] = getBithumbKRW("EOS") / getBithumbKRW("BTC") * count["EOS"];
+		krw_by_btc["EOS"] = count["EOS"] * getBithumbKRW("EOS");
+		krw_by_xrp["EOS"] = count["EOS"] * getBithumbKRW("EOS");
+		
+		beginTable();
+		addTableRow("BTS", getKRWOnPoloniexByXRP("BTS"), getPoloniexBTC("BTS"), count["BTS"], btc["BTS"], krw_by_btc["BTS"], krw_by_xrp["BTS"]);
+		addTableRow("XRP", getBithumbKRW("XRP"),		 getPoloniexBTC("XRP"), count["XRP"], btc["XRP"], krw_by_btc["XRP"], krw_by_xrp["XRP"]);
+		addTableRow("EOS", getBithumbKRW("EOS"),		 bithumb_btc["EOS"], 	count["EOS"], btc["EOS"], krw_by_btc["EOS"], krw_by_xrp["EOS"]);
+		
+		var sum1 = 0;
+		for (var key in btc) {
+			sum1 += btc[key];
+		}
+		
+		var sum2 = 0;
+		for (var key in krw_by_btc) {
+			sum2 += krw_by_btc[key];
+		}
+		
+		var sum3 = 0;
+		for (var key in krw_by_xrp) {
+			sum3 += krw_by_xrp[key];
+		}
+		
+		
+		addTableRow("합계", 0, 0, 0, sum1, sum2, sum3);
+		endTable();
+		//alert(tableBuffer);
+	}
+
 $(document).ready(function(){
 	
 	initPriceBithumb();
 	initPricePoloniex();
 	
+	/*
 	//버튼 클릭 이벤트 핸들러
 	$("button").click(function(){
 		
@@ -203,6 +257,7 @@ $(document).ready(function(){
 		endTable();
 		//alert(tableBuffer);
 	});
+	*/
 });
 
 
@@ -222,7 +277,7 @@ $(document).ready(function(){
 <P>자산</P>
 <P>BTS | Bitshares <input id="txtBtsCnt" value="133321"></input></p>
 <P>XRP | Ripple <input id="txtXrpCnt" value="23600"></input></p>
-<P>EOS | EOS <input id="txtEosCnt" value="2575.565774"></input></p>
+<P>EOS | EOS <input id="txtEosCnt" value="4467"></input></p>
 <P><button>Submit</button> </p>
 <div id="resultWindow">
 </div>
