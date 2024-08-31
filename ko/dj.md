@@ -1,5 +1,7 @@
 # Directory Jump (dj)
 
+터미널에서 디렉토리 위치를 저장하고 이동을 도와준다
+
 ## 도움말
 
 ```bash
@@ -37,3 +39,5 @@ Changing directory to: /home/username/Desktop
 
 /home/username/Desktop $
 ```
+
+## 사용법22

@@ -1,7 +1,7 @@
 {
-    "additionalFooterText": "All content and images &copy; Ghostyak&nbsp;",
-    "anchorCharacter": "#",
-    "lineBreaks": "gfm",
-    "title": "Ghostyak's tools",
-    "useSideMenu": false
+  "additionalFooterText": "All content and images &copy; Ghostyak&nbsp;",
+  "anchorCharacter": "#",
+  "lineBreaks": "original",
+  "title": "Ghostyak's tools",
+  "useSideMenu": true
 }
